@@ -9,6 +9,16 @@
 /**
  * 
  */
+USTRUCT()
+struct FServerData 
+{
+	GENERATED_BODY()
+
+	FString Name;
+	uint16 CurrentPlayers;
+	uint16 MaxPlayers;
+	FString HostUsername;
+};
 UCLASS()
 class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 {
@@ -16,7 +26,7 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 
 public:
 	UMainMenu(const FObjectInitializer& ObjectInitializer);
-	void SetServerList(TArray<FString>ServerNames);
+	void SetServerList(TArray<FServerData>ServerNames);
 	void SelectIndex(uint32 Index);
 protected:
 	virtual bool Initialize();
@@ -27,6 +37,15 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* HostButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UEditableTextBox* ServerHostName;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ConfirmHostMenuButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CancelHostMenuButton;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* JoinButton;
@@ -50,6 +69,9 @@ private:
 	class UWidget* JoinMenu;
 
 	UPROPERTY(meta = (BindWidget))
+	class UWidget* HostMenu;
+
+	UPROPERTY(meta = (BindWidget))
 	class UPanelWidget* ServerList;
 
 
@@ -59,6 +81,8 @@ private:
 	UFUNCTION()
 	void JoinServer();
 
+	UFUNCTION()
+	void OpenHostMenu();
 
 	UFUNCTION()
 	void OpenJoinMenu();
@@ -68,6 +92,9 @@ private:
 
 	UFUNCTION()
 	void QuitPressed();
+
+	UFUNCTION()
+	void UpdateChildren();
 
 	TOptional<uint32> SelectedIndex;
 };
