@@ -58,4 +58,6 @@ private:
 
 	void CreateSession();
 	void DestroySession();
+
+	void StartSession();
 };

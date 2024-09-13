@@ -2,6 +2,7 @@
 
 
 #include "LobbyGameMode.h"
+#include "TimerManager.h"
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
@@ -10,11 +11,8 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 
 	if (NumberOfPlayers >= 3)
 	{
-		UWorld* World = GetWorld();
-		if (!ensure(World != nullptr)) return;
-
-		bUseSeamlessTravel = true;
-		World->ServerTravel("/Game/PuzzlePlatforms/Maps/Game?listen");
+		GetWorldTimerManager().SetTimer(GameStartTimer, this, &ALobbyGameMode::StartGame, 5);
+		
 	}
 }
 
@@ -22,4 +20,13 @@ void ALobbyGameMode::Logout(AController* Exiting)
 {
 	Super::Logout(Exiting);
 	--NumberOfPlayers;
+}
+
+void ALobbyGameMode::StartGame()
+{
+	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+
+	bUseSeamlessTravel = true;
+	World->ServerTravel("/Game/PuzzlePlatforms/Maps/Game?listen");
 }
