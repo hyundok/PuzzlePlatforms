@@ -33,7 +33,9 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AFPSCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AFPSCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFPSCharacter::AddControllerYawInput);
+	PlayerInputComponent->BindAxis(TEXT("TurnRate"), this, &AFPSCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AFPSCharacter::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AFPSCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AFPSCharacter::Jump);
 }
 
@@ -45,5 +47,15 @@ void AFPSCharacter::MoveForward(float AxisValue)
 void AFPSCharacter::MoveRight(float AxisValue)
 {
 	AddMovementInput(GetActorForwardVector() * AxisValue);
+}
+
+void AFPSCharacter::LookUpRate(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AFPSCharacter::LookRightRate(float AxisValue)
+{
+	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
